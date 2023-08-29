@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import AddTask from './addTask';
 import Task from './task';
+import { v4 } from 'uuid';
 
 function Board () {
     const [isAddTaskOpen, setIsAddTaskOpen] = useState(false);
@@ -10,10 +11,25 @@ function Board () {
     
 
     const handleCreateTask = (title, description) => {
-        const newTask = { title, description };
+        const newTask = { title, description, id:v4() };
         setTasks(prevTasks => [...prevTasks, newTask]);
         setIsAddTaskOpen(false);
     };
+
+    const handleDeleteTask = (id) =>{
+        setTasks(prevState =>prevState.filter(task =>task.id !== id))
+    };
+
+
+    const handleEditTask = (id, editedTitle, editedDescription) => {
+        setTasks(prevTasks =>
+            prevTasks.map(task =>
+                task.id === id
+                    ? { ...task, title: editedTitle, description: editedDescription }
+                    : task
+            )
+        );
+    }
 
 
 
@@ -34,17 +50,23 @@ function Board () {
         return (
             <div className='board'>
                 <div className='addTaskBtnContainer'>
-                    <button onClick={openAddTask}>addTask</button>
+                    <button className='addTaskBtn' onClick={openAddTask}>addTask</button>
                 </div>
                 <div>
                     <div className='status'>
                         <span className='statusText'>ToDo</span>
 
-                        {tasks.map((task, index) => (
-                            <div key={index}>
-                                <Task title={task.title} description={task.description} />
-                            </div>
-                        ))}
+                        {tasks.map(task => (
+                        <div key={task.id}>
+                            <Task
+                                title={task.title}
+                                description={task.description}
+                                id={task.id}
+                                handleDeleteTask={handleDeleteTask}
+                                handleEditTask={handleEditTask}
+                            />
+                        </div>
+                    ))}
 
                     </div>
                     <div className='status'>
