@@ -71,9 +71,9 @@ function Board () {
                     </div>
                     <div className='status'>
                         <span className='statusText'>inProgress</span>
-                        {/* <div>
-                            <h2>Content</h2>
-                        </div> */}
+                        <div>
+                            <h2>Test</h2>
+                        </div>
                     </div>
                     <div className='status'>
                         <span className='statusText'>done</span>
